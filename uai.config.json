@@ -1,0 +1,11 @@
+{
+  "$schema": "https://uai.squadfy.io/schema.json",
+  "theme": {
+    "default": "heineken",
+    "list": [
+      "heineken"
+    ]
+  },
+  "isSSR": true,
+  "packageManager": "yarn"
+}
