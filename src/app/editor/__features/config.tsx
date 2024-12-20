@@ -157,9 +157,27 @@ export const config: Config<Props> = {
           label: "Items",
           type: "array",
           arrayFields: {
-            image: { type: "text" },
-            title: { type: "text" },
-            description: { type: "text" },
+            image: {
+              type: "custom",
+              label: "Imagem",
+              render: ({ onChange, value }) => (
+                <InputDropzone
+                  label="Imagem Desktop"
+                  preview={value}
+                  options={{
+                    accept: {
+                      "image/png": [".png"],
+                      "image/jpeg": [".jpeg", ".jpg"],
+                      "image/webp": [".webp"],
+                    },
+                    onDrop: (e) => handleUploadFile(e, onChange),
+                  }}
+                  style={{ border: "1px solid black", padding: 4 }}
+                />
+              ),
+            },
+            title: { label: "Título", type: "text" },
+            description: { label: "Descrição", type: "text" },
           },
         },
       },
