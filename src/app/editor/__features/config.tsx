@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { Button, ButtonProps } from "@/@uai/components/core/button/default"
+import { InputDropzone } from "@/@uai/components/core/input/dropzone"
 import { Heading } from "@/@uai/components/core/typography/heading"
 import { Paragraph } from "@/@uai/components/core/typography/paragraph"
 import classNames from "@/@uai/utils/classNames"
@@ -85,9 +86,45 @@ export const config: Config<Props> = {
     Image: {
       label: "Seção de Imagem",
       fields: {
-        imgDesk: { type: "text" },
-        imgMobile: { type: "text" },
-        alt: { type: "text" },
+        alt: { label: "Legenda da Imagem", type: "text" },
+        imgDesk: {
+          type: "custom",
+          label: "Imagem",
+          render: ({ onChange, value }) => (
+            <InputDropzone
+              label="Imagem Desktop"
+              preview={value}
+              options={{
+                accept: {
+                  "image/png": [".png"],
+                  "image/jpeg": [".jpeg", ".jpg"],
+                  "image/webp": [".webp"],
+                },
+                onDrop: (e) => handleUploadFile(e, onChange),
+              }}
+              style={{ border: "1px solid black", padding: 4 }}
+            />
+          ),
+        },
+        imgMobile: {
+          type: "custom",
+          label: "Imagem",
+          render: ({ onChange, value }) => (
+            <InputDropzone
+              label="Imagem Mobile"
+              preview={value}
+              options={{
+                accept: {
+                  "image/png": [".png"],
+                  "image/jpeg": [".jpeg", ".jpg"],
+                  "image/webp": [".webp"],
+                },
+                onDrop: (e) => handleUploadFile(e, onChange),
+              }}
+              style={{ border: "1px solid black", padding: 4 }}
+            />
+          ),
+        },
       },
       defaultProps: {
         imgDesk:
@@ -115,8 +152,9 @@ export const config: Config<Props> = {
     Cards: {
       label: "Seção de Cards",
       fields: {
-        title: { type: "text" },
+        title: { label: "Título da Seção", type: "text" },
         items: {
+          label: "Items",
           type: "array",
           arrayFields: {
             image: { type: "text" },
@@ -197,8 +235,8 @@ export const config: Config<Props> = {
     Iframe: {
       label: "Seção de Iframe",
       fields: {
-        title: { type: "text" },
-        src: { type: "text" },
+        title: { label: "Título da Seção", type: "text" },
+        src: { label: "Link do iframe", type: "text" },
       },
       defaultProps: {
         title: "Onde Comprar",
@@ -227,3 +265,23 @@ export const config: Config<Props> = {
 }
 
 export default config
+
+const handleUploadFile = async (file: any[], onChange: (ev: any) => void) => {
+  if (!file || file.length === 0) {
+    console.error("Nenhum arquivo fornecido")
+    return
+  }
+
+  const reader = new FileReader()
+
+  reader.onload = () => {
+    const base64String = reader.result as string
+    onChange(base64String)
+  }
+
+  reader.onerror = () => {
+    console.error("Erro ao ler o arquivo:", reader.error)
+  }
+
+  reader.readAsDataURL(file[0])
+}
